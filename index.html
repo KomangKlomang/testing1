@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>C Store — Premium Vape Store</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --black:#121212;
+  --soft-black:#1A1A1A;
+  --espresso:#2B1E1A;
+  --beige:#E6D3B3;
+  --caramel:#C89B6D;
+  --brown:#A67C52;
+  --gold:#BFA27A;
+  --wa:#25D366;
+}
+html{scroll-behavior:smooth;font-size:16px}
+body{
+  background:var(--black);
+  color:var(--beige);
+  font-family:'DM Sans',sans-serif;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ===================== AGE GATE ===================== */
+#age-gate{
+  position:fixed;inset:0;background:var(--black);z-index:9999;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:2rem;
+}
+.smoke-bg{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.smoke-particle{
+  position:absolute;bottom:-30px;border-radius:50%;
+  background:rgba(191,162,122,0.12);
+  animation:smokeRise linear infinite;
+}
+@keyframes smokeRise{
+  0%{transform:translateY(0) scale(1) rotate(0deg);opacity:0.7}
+  50%{opacity:0.4}
+  100%{transform:translateY(-110vh) scale(4) rotate(180deg);opacity:0}
+}
+.ag-content{position:relative;z-index:2;text-align:center;max-width:340px;width:100%}
+.ag-logo-wrap{margin-bottom:2.5rem}
+.ag-logo{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:5rem;letter-spacing:6px;
+  color:var(--gold);line-height:1;
+  text-shadow:0 0 60px rgba(191,162,122,0.3);
+}
+.ag-logo-sub{
+  font-size:0.65rem;letter-spacing:5px;
+  color:var(--brown);text-transform:uppercase;margin-top:0.25rem;
+}
+.ag-divider{
+  width:60px;height:1px;background:linear-gradient(to right,transparent,var(--gold),transparent);
+  margin:0 auto 2.5rem;
+}
+.ag-headline{
+  font-size:0.8rem;letter-spacing:3px;color:var(--brown);
+  text-transform:uppercase;margin-bottom:0.5rem;
+}
+.ag-age{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:7rem;color:var(--gold);line-height:1;
+  margin-bottom:0.25rem;
+}
+.ag-plus{font-size:2rem;color:var(--caramel);vertical-align:super}
+.ag-question{
+  font-size:1rem;color:var(--beige);font-weight:300;
+  margin-bottom:2.5rem;letter-spacing:1px;
+}
+.ag-btns{display:flex;gap:0.75rem;justify-content:center;margin-bottom:2rem}
+.btn-yes{
+  background:var(--gold);color:var(--black);
+  padding:1rem 2.5rem;
+  font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:3px;
+  border:none;cursor:pointer;
+  transition:background 0.2s,transform 0.1s;
+  flex:1;max-width:160px;
+}
+.btn-yes:hover{background:var(--caramel)}
+.btn-yes:active{transform:scale(0.97)}
+.btn-no{
+  background:transparent;color:var(--brown);
+  padding:1rem 2rem;
+  font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:3px;
+  border:1px solid rgba(166,124,82,0.4);cursor:pointer;
+  transition:all 0.2s;
+  flex:1;max-width:140px;
+}
+.btn-no:hover{border-color:var(--beige);color:var(--beige)}
+.ag-note{
+  font-size:0.62rem;color:rgba(166,124,82,0.6);
+  line-height:1.7;max-width:280px;margin:0 auto;
+  letter-spacing:0.5px;
+}
+
+/* ===================== MAIN ===================== */
+#main{display:none}
+
+/* ===================== NAV ===================== */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:1rem 1.5rem;
+  display:flex;align-items:center;justify-content:space-between;
+  background:linear-gradient(to bottom,rgba(18,18,18,0.98) 0%,rgba(18,18,18,0) 100%);
+  pointer-events:none;
+}
+.nav-logo{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.8rem;color:var(--gold);letter-spacing:4px;
+  pointer-events:all;cursor:pointer;
+}
+.nav-actions{display:flex;align-items:center;gap:0.75rem;pointer-events:all}
+.nav-icon{
+  width:36px;height:36px;
+  border:1px solid rgba(166,124,82,0.3);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all 0.2s;
+}
+.nav-icon:hover{border-color:var(--gold);background:rgba(191,162,122,0.1)}
+.nav-icon svg{width:16px;height:16px;fill:var(--beige)}
+
+/* ===================== HERO ===================== */
+#hero{
+  min-height:100svh;
+  background:var(--black);
+  position:relative;overflow:hidden;
+  display:flex;flex-direction:column;
+  justify-content:flex-end;
+  padding:2rem 1.5rem 6rem;
+}
+.hero-gradient{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 70%,rgba(43,30,26,0.9) 0%,transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 30%,rgba(43,30,26,0.4) 0%,transparent 50%);
+  pointer-events:none;
+}
+.hero-grain{
+  position:absolute;inset:0;opacity:0.04;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:200px;
+}
+.hero-line-v{
+  position:absolute;right:8%;top:0;bottom:0;width:1px;
+  background:linear-gradient(to bottom,transparent 0%,rgba(191,162,122,0.15) 30%,rgba(191,162,122,0.15) 70%,transparent 100%);
+}
+.hero-line-v2{
+  position:absolute;right:16%;top:0;bottom:0;width:1px;
+  background:linear-gradient(to bottom,transparent 0%,rgba(43,30,26,0.5) 30%,rgba(43,30,26,0.5) 70%,transparent 100%);
+}
+.hero-particles{position:absolute;inset:0;pointer-events:none}
+.hp{
+  position:absolute;border-radius:50%;
+  background:rgba(191,162,122,0.08);
+  animation:hpRise linear infinite;
+}
+@keyframes hpRise{
+  0%{transform:translateY(0) scale(0.5);opacity:0}
+  10%{opacity:0.8}
+  80%{opacity:0.2}
+  100%{transform:translateY(-100vh) scale(2.5);opacity:0}
+}
+.hero-eyebrow{
+  font-size:0.62rem;letter-spacing:5px;color:var(--gold);
+  text-transform:uppercase;margin-bottom:1rem;
+  opacity:0;animation:fadeUp 0.7s ease 0.4s forwards;
+}
+.hero-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:min(5.5rem,22vw);
+  line-height:0.88;color:var(--beige);
+  margin-bottom:1.5rem;
+  opacity:0;animation:fadeUp 0.7s ease 0.6s forwards;
+  position:relative;z-index:1;
+}
+.hero-title .accent{color:var(--gold)}
+.hero-title .outline{
+  -webkit-text-stroke:1px var(--gold);
+  color:transparent;
+}
+.hero-desc{
+  font-size:0.85rem;color:rgba(230,211,179,0.7);
+  line-height:1.75;max-width:300px;margin-bottom:2rem;font-weight:300;
+  opacity:0;animation:fadeUp 0.7s ease 0.8s forwards;
+}
+.hero-ctas{
+  display:flex;flex-direction:column;gap:0.75rem;margin-bottom:2.5rem;
+  opacity:0;animation:fadeUp 0.7s ease 1s forwards;
+}
+.cta-primary{
+  background:var(--gold);color:var(--black);
+  padding:1.1rem 1.5rem;
+  font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:3px;
+  border:none;cursor:pointer;
+  display:flex;align-items:center;gap:0.875rem;
+  transition:all 0.2s;width:100%;
+}
+.cta-primary:hover{background:var(--caramel)}
+.cta-primary:active{transform:scale(0.98)}
+.cta-secondary{
+  background:transparent;color:var(--beige);
+  padding:1.1rem 1.5rem;
+  font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:3px;
+  border:1px solid rgba(191,162,122,0.3);cursor:pointer;
+  display:flex;align-items:center;gap:0.875rem;
+  transition:all 0.2s;width:100%;
+}
+.cta-secondary:hover{border-color:var(--gold);color:var(--gold)}
+.cta-secondary:active{transform:scale(0.98)}
+.hero-stats{
+  display:flex;gap:0;
+  border-top:1px solid rgba(43,30,26,0.8);padding-top:1.5rem;
+  opacity:0;animation:fadeUp 0.7s ease 1.2s forwards;
+}
+.hstat{
+  flex:1;padding-right:1.25rem;
+  border-right:1px solid rgba(43,30,26,0.8);
+}
+.hstat:last-child{border-right:none;padding-left:1.25rem;padding-right:0}
+.hstat:not(:first-child){padding-left:1.25rem}
+.hstat-num{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:2.2rem;color:var(--gold);line-height:1;
+}
+.hstat-label{font-size:0.6rem;letter-spacing:2px;color:var(--brown);text-transform:uppercase;margin-top:0.2rem}
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(28px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ===================== SECTIONS BASE ===================== */
+.section{padding:5rem 1.5rem}
+.section-alt{background:var(--soft-black)}
+.s-eyebrow{
+  font-size:0.6rem;letter-spacing:5px;color:var(--gold);
+  text-transform:uppercase;margin-bottom:0.75rem;
+}
+.s-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(2.5rem,10vw,3.5rem);
+  color:var(--beige);line-height:0.92;margin-bottom:1.25rem;
+}
+.s-divider{
+  width:36px;height:2px;
+  background:linear-gradient(to right,var(--gold),transparent);
+  margin-bottom:2rem;
+}
+
+/* ===================== GRABMART ===================== */
+.grab-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:0.75rem;
+}
+.grab-card{
+  background:var(--espresso);
+  padding:1.25rem 1rem 1rem;
+  cursor:pointer;
+  transition:all 0.25s;
+  border:1px solid transparent;
+  position:relative;overflow:hidden;
+}
+.grab-card::after{
+  content:'';position:absolute;
+  bottom:0;left:0;right:0;height:2px;
+  background:var(--gold);
+  transform:scaleX(0);transform-origin:left;
+  transition:transform 0.3s ease;
+}
+.grab-card:hover{border-color:rgba(191,162,122,0.2);transform:translateY(-2px)}
+.grab-card:hover::after{transform:scaleX(1)}
+.grab-card:active{transform:scale(0.97)}
+.grab-badge{
+  display:inline-block;
+  background:rgba(0,0,0,0.3);
+  font-size:0.5rem;letter-spacing:2px;color:var(--gold);
+  text-transform:uppercase;padding:0.25rem 0.5rem;
+  margin-bottom:0.75rem;border:1px solid rgba(191,162,122,0.2);
+}
+.grab-name{
+  font-size:0.78rem;font-weight:500;color:var(--beige);
+  line-height:1.35;margin-bottom:1rem;min-height:2.7rem;
+}
+.grab-cta{
+  background:var(--gold);color:var(--black);
+  font-family:'Bebas Neue',sans-serif;
+  font-size:0.75rem;letter-spacing:2px;
+  padding:0.5rem;border:none;cursor:pointer;
+  width:100%;transition:background 0.2s;
+  display:flex;align-items:center;justify-content:center;gap:0.4rem;
+}
+.grab-cta:hover{background:var(--caramel)}
+
+/* ===================== WHATSAPP ===================== */
+.city-tabs{
+  display:flex;overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  border-bottom:1px solid var(--espresso);
+  margin-bottom:1.5rem;
+  gap:0;
+}
+.city-tabs::-webkit-scrollbar{display:none}
+.ctab{
+  padding:0.75rem 1.125rem;
+  font-size:0.68rem;letter-spacing:1.5px;
+  color:var(--brown);background:transparent;
+  border:none;border-bottom:2px solid transparent;
+  margin-bottom:-1px;cursor:pointer;
+  white-space:nowrap;font-family:'DM Sans',sans-serif;
+  transition:all 0.2s;
+}
+.ctab.active{color:var(--gold);border-bottom-color:var(--gold)}
+.ctab:hover:not(.active){color:var(--beige)}
+.city-panel{display:none}
+.city-panel.active{display:block}
+.cp-meta{
+  font-size:0.62rem;letter-spacing:3px;color:var(--brown);
+  text-transform:uppercase;margin-bottom:1rem;
+}
+.wa-list{display:flex;flex-direction:column;gap:0.5rem}
+.wa-item{
+  background:rgba(26,26,26,0.8);
+  border:1px solid var(--espresso);
+  padding:0.875rem 1rem;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:1rem;cursor:pointer;
+  transition:all 0.2s;
+  -webkit-tap-highlight-color:transparent;
+}
+.wa-item:hover{
+  border-color:rgba(37,211,102,0.3);
+  background:rgba(37,211,102,0.04);
+}
+.wa-item:active{transform:scale(0.99)}
+.wa-item-name{font-size:0.83rem;color:var(--beige);line-height:1.3}
+.wa-btn{
+  width:36px;height:36px;min-width:36px;
+  background:var(--wa);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+}
+.wa-btn svg{width:18px;height:18px;fill:white}
+
+/* ===================== PROMO ===================== */
+.promo-tabs{
+  display:flex;gap:0.5rem;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;
+  scrollbar-width:none;margin-bottom:1.5rem;
+}
+.promo-tabs::-webkit-scrollbar{display:none}
+.ptab{
+  padding:0.6rem 1.25rem;
+  font-size:0.68rem;letter-spacing:2px;
+  background:transparent;color:var(--brown);
+  border:1px solid var(--espresso);
+  cursor:pointer;white-space:nowrap;
+  font-family:'DM Sans',sans-serif;
+  transition:all 0.2s;
+}
+.ptab.active{background:var(--gold);color:var(--black);border-color:var(--gold)}
+.ptab:hover:not(.active){border-color:var(--brown);color:var(--beige)}
+.promo-panel{display:none}
+.promo-panel.active{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem}
+.promo-empty{
+  display:none;padding:3rem 2rem;text-align:center;
+  font-size:0.75rem;letter-spacing:3px;color:var(--brown);
+  text-transform:uppercase;border:1px dashed var(--espresso);
+  grid-column:1/-1;line-height:2;
+}
+.promo-panel.active .promo-empty{display:block}
+.promo-card{
+  background:var(--espresso);overflow:hidden;
+  border:1px solid transparent;transition:border 0.2s;
+  cursor:pointer;
+}
+.promo-card:hover{border-color:rgba(191,162,122,0.2)}
+.promo-thumb{
+  height:110px;
+  background:linear-gradient(135deg,var(--black) 0%,var(--espresso) 100%);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.promo-thumb-label{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:2rem;color:rgba(191,162,122,0.2);letter-spacing:3px;
+}
+.promo-badge{
+  position:absolute;top:0.5rem;right:0.5rem;
+  background:var(--gold);color:var(--black);
+  font-family:'Bebas Neue',sans-serif;
+  font-size:0.9rem;letter-spacing:1px;
+  padding:0.15rem 0.5rem;
+}
+.promo-body{padding:0.875rem}
+.promo-name{font-size:0.78rem;font-weight:500;color:var(--beige);margin-bottom:0.25rem}
+.promo-price{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.2rem;color:var(--gold);
+}
+
+/* ===================== LOKASI ===================== */
+.lokasi-list{display:flex;flex-direction:column;gap:0.5rem}
+.lokasi-city{border:1px solid var(--espresso);overflow:hidden}
+.lokasi-header{
+  padding:1rem 1.25rem;
+  display:flex;align-items:center;justify-content:space-between;
+  cursor:pointer;transition:background 0.2s;
+  -webkit-tap-highlight-color:transparent;
+}
+.lokasi-header:hover{background:rgba(43,30,26,0.6)}
+.lh-left{display:flex;align-items:center;gap:1rem}
+.lh-city{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.15rem;color:var(--beige);letter-spacing:2px;
+}
+.lh-count{
+  font-size:0.6rem;letter-spacing:2px;
+  color:var(--brown);text-transform:uppercase;
+  background:rgba(43,30,26,0.8);
+  padding:0.2rem 0.6rem;
+}
+.lh-arrow{
+  font-size:0.9rem;color:var(--gold);
+  transition:transform 0.3s ease;
+}
+.lokasi-body{
+  max-height:0;overflow:hidden;
+  transition:max-height 0.4s ease;
+  border-top:0px solid var(--espresso);
+}
+.lokasi-city.open .lokasi-body{
+  max-height:600px;
+  border-top-width:1px;
+}
+.lokasi-city.open .lh-arrow{transform:rotate(90deg)}
+.lokasi-outlet{
+  padding:0.75rem 1.25rem;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid rgba(43,30,26,0.5);
+}
+.lokasi-outlet:last-child{border-bottom:none}
+.lo-name{font-size:0.8rem;color:var(--beige)}
+.lo-wa{
+  font-size:0.62rem;letter-spacing:2px;
+  color:var(--wa);text-transform:uppercase;
+  cursor:pointer;padding:0.3rem 0.5rem;
+  border:1px solid rgba(37,211,102,0.2);
+  transition:all 0.2s;
+  white-space:nowrap;
+}
+.lo-wa:hover{background:rgba(37,211,102,0.1)}
+
+/* ===================== ABOUT ===================== */
+#about{
+  background:var(--espresso);
+  position:relative;overflow:hidden;
+}
+.about-watermark{
+  position:absolute;
+  right:-2rem;top:50%;transform:translateY(-50%);
+  font-family:'Bebas Neue',sans-serif;
+  font-size:9rem;color:rgba(18,18,18,0.35);
+  letter-spacing:6px;pointer-events:none;
+  line-height:1;white-space:nowrap;
+}
+.about-inner{position:relative;z-index:1}
+.about-body{
+  font-size:0.88rem;color:rgba(230,211,179,0.75);
+  line-height:1.85;margin-bottom:1.5rem;font-weight:300;
+}
+.about-stats{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:0.75rem;margin-top:2rem;
+}
+.as-card{
+  background:rgba(18,18,18,0.35);
+  padding:1.25rem 0.75rem;text-align:center;
+}
+.as-num{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:2.8rem;color:var(--gold);line-height:1;
+}
+.as-label{
+  font-size:0.58rem;letter-spacing:2px;
+  color:var(--brown);text-transform:uppercase;
+  margin-top:0.3rem;line-height:1.4;
+}
+
+/* ===================== FOOTER ===================== */
+footer{
+  background:var(--black);
+  padding:3.5rem 1.5rem 3rem;
+  border-top:1px solid var(--espresso);
+}
+.footer-logo{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:3rem;color:var(--gold);letter-spacing:5px;margin-bottom:0.25rem;
+}
+.footer-tagline{
+  font-size:0.65rem;letter-spacing:3px;color:var(--brown);
+  text-transform:uppercase;margin-bottom:2rem;
+}
+.footer-links{
+  display:flex;flex-wrap:wrap;gap:0.5rem 1.5rem;
+  margin-bottom:2.5rem;
+}
+.footer-link{
+  font-size:0.72rem;letter-spacing:2px;color:var(--brown);
+  text-transform:uppercase;cursor:pointer;
+  transition:color 0.2s;
+}
+.footer-link:hover{color:var(--gold)}
+.footer-disclaimer{
+  font-size:0.62rem;color:rgba(43,30,26,0.8);
+  line-height:1.7;padding-top:1.5rem;
+  border-top:1px solid var(--espresso);
+}
+
+/* ===================== WA FLOAT ===================== */
+#wa-float{
+  position:fixed;bottom:1.5rem;right:1.5rem;
+  width:54px;height:54px;
+  background:var(--wa);border-radius:50%;
+  display:none;align-items:center;justify-content:center;
+  cursor:pointer;z-index:50;
+  box-shadow:0 0 0 0 rgba(37,211,102,0.4);
+  animation:waPulse 2.5s infinite;
+}
+@keyframes waPulse{
+  0%{box-shadow:0 0 0 0 rgba(37,211,102,0.4)}
+  70%{box-shadow:0 0 0 14px rgba(37,211,102,0)}
+  100%{box-shadow:0 0 0 0 rgba(37,211,102,0)}
+}
+#wa-float svg{width:26px;height:26px;fill:white}
+
+/* ===================== SCROLL REVEAL ===================== */
+.reveal{
+  opacity:0;transform:translateY(24px);
+  transition:opacity 0.65s ease,transform 0.65s ease;
+}
+.reveal.in{opacity:1;transform:none}
+.reveal-delay-1{transition-delay:0.1s}
+.reveal-delay-2{transition-delay:0.2s}
+
+/* ===================== UTILS ===================== */
+.sr-only{
+  position:absolute;width:1px;height:1px;
+  padding:0;margin:-1px;overflow:hidden;
+  clip:rect(0,0,0,0);white-space:nowrap;border:0;
+}
+</style>
+</head>
+<body>
+
+<h2 class="sr-only">C Store — Premium Vape Store Landing Page</h2>
+
+<!-- ===== AGE GATE ===== -->
+<div id="age-gate" role="dialog" aria-modal="true" aria-label="Verifikasi Usia">
+  <div class="smoke-bg" id="smokeBg"></div>
+  <div class="ag-content">
+    <div class="ag-logo-wrap">
+      <div class="ag-logo">C STORE</div>
+      <div class="ag-logo-sub">Premium Vape Store</div>
+    </div>
+    <div class="ag-divider"></div>
+    <div class="ag-headline">Verifikasi Usia</div>
+    <div class="ag-age">21<span class="ag-plus">+</span></div>
+    <div class="ag-question">Apakah kamu berusia 21 tahun ke atas?</div>
+    <div class="ag-btns">
+      <button class="btn-yes" onclick="enterSite()" aria-label="Ya, saya berusia 21 tahun ke atas">YA, MASUK</button>
+      <button class="btn-no" onclick="exitSite()" aria-label="Tidak, keluar">TIDAK</button>
+    </div>
+    <p class="ag-note">Dengan memasuki situs ini, kamu mengkonfirmasi bahwa kamu berusia minimal 21 tahun dan memahami risiko produk yang mengandung nikotin.</p>
+  </div>
+</div>
+
+<!-- ===== MAIN ===== -->
+<div id="main">
+
+  <!-- NAV -->
+  <nav aria-label="Navigasi utama">
+    <div class="nav-logo" onclick="window.scrollTo({top:0,behavior:'smooth'})">C STORE</div>
+    <div class="nav-actions">
+      <div class="nav-icon" onclick="goIG()" aria-label="Instagram C Store" role="button" tabindex="0">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero" aria-label="Hero section">
+    <div class="hero-gradient"></div>
+    <div class="hero-grain"></div>
+    <div class="hero-line-v"></div>
+    <div class="hero-line-v2"></div>
+    <div class="hero-particles" id="heroParticles"></div>
+    <div style="position:relative;z-index:2">
+      <div class="hero-eyebrow">Premium Vape Store · 8 Kota · 43 Outlet</div>
+      <h1 class="hero-title">
+        VAPE<br>
+        <span class="accent">TERBAIK</span><br>
+        <span class="outline">DIANTAR</span><br>
+        CEPAT.
+      </h1>
+      <p class="hero-desc">Pilih outlet terdekatmu, order langsung via GrabMart atau WhatsApp. Premium pods, devices & accessories — siap dikirim ke tanganmu.</p>
+      <div class="hero-ctas">
+        <button class="cta-primary" onclick="goTo('grabmart')" aria-label="Order via GrabMart">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          ORDER VIA GRABMART
+        </button>
+        <button class="cta-secondary" onclick="goTo('whatsapp')" aria-label="Order via WhatsApp">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          ORDER VIA WHATSAPP
+        </button>
+      </div>
+      <div class="hero-stats">
+        <div class="hstat">
+          <div class="hstat-num">43</div>
+          <div class="hstat-label">Total Outlet</div>
+        </div>
+        <div class="hstat">
+          <div class="hstat-num">8</div>
+          <div class="hstat-label">Kota</div>
+        </div>
+        <div class="hstat">
+          <div class="hstat-num">4</div>
+          <div class="hstat-label">GrabMart</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GRABMART -->
+  <section id="grabmart" class="section section-alt" aria-label="Order via GrabMart">
+    <div class="reveal">
+      <div class="s-eyebrow">Delivery · Fast · Easy</div>
+      <h2 class="s-title">ORDER VIA<br>GRABMART</h2>
+      <div class="s-divider"></div>
+      <div class="grab-grid">
+        <div class="grab-card" onclick="openLink('https://r.grab.com/g/2-2-6-C7T1JP5XE3LBRX')" role="link" tabindex="0" aria-label="GrabMart C Store Tlogosari Semarang">
+          <div class="grab-badge">GrabMart</div>
+          <div class="grab-name">C Store Tlogosari<br>Semarang</div>
+          <button class="grab-cta" tabindex="-1">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            BUKA DI GRAB
+          </button>
+        </div>
+        <div class="grab-card" onclick="openLink('https://r.grab.com/g/2-2-6-C7THRZJKVE4HC2')" role="link" tabindex="0" aria-label="GrabMart C Store Kedungmundu Semarang">
+          <div class="grab-badge">GrabMart</div>
+          <div class="grab-name">C Store Kedungmundu<br>Semarang</div>
+          <button class="grab-cta" tabindex="-1">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            BUKA DI GRAB
+          </button>
+        </div>
+        <div class="grab-card" onclick="openLink('https://r.grab.com/g/2-2-6-C7TKG8BZEBDDTJ')" role="link" tabindex="0" aria-label="GrabMart C Store Palem Semi Karawaci">
+          <div class="grab-badge">GrabMart</div>
+          <div class="grab-name">C Store Palem Semi<br>Karawaci</div>
+          <button class="grab-cta" tabindex="-1">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            BUKA DI GRAB
+          </button>
+        </div>
+        <div class="grab-card" onclick="openLink('https://food.grab.com/id/en/restaurant/c-store-benda-pamulang-vape-store-b5003-delivery/6-C7TAR8J1BCCZDA')" role="link" tabindex="0" aria-label="GrabMart C Store Benda Pamulang">
+          <div class="grab-badge">GrabMart</div>
+          <div class="grab-name">C Store Benda<br>Pamulang</div>
+          <button class="grab-cta" tabindex="-1">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            BUKA DI GRAB
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHATSAPP -->
+  <section id="whatsapp" class="section" aria-label="Order via WhatsApp">
+    <div class="reveal">
+      <div class="s-eyebrow">Chat · Order · Personal</div>
+      <h2 class="s-title">ORDER VIA<br>WHATSAPP</h2>
+      <div class="s-divider"></div>
+      <div class="city-tabs" id="cityTabs" role="tablist" aria-label="Pilih kota"></div>
+      <div id="cityPanels"></div>
+    </div>
+  </section>
+
+  <!-- PROMO -->
+  <section id="promo" class="section section-alt" aria-label="Promo dan deals">
+    <div class="reveal">
+      <div class="s-eyebrow">Hemat · Deals · Hot</div>
+      <h2 class="s-title">PROMO &amp;<br>DEALS</h2>
+      <div class="s-divider"></div>
+      <div class="promo-tabs" role="tablist" aria-label="Kategori promo">
+        <button class="ptab active" onclick="switchPromo(this,'flash')" role="tab" aria-selected="true">Flash Sale</button>
+        <button class="ptab" onclick="switchPromo(this,'bundle')" role="tab" aria-selected="false">Bundle</button>
+        <button class="ptab" onclick="switchPromo(this,'new')" role="tab" aria-selected="false">New Arrivals</button>
+      </div>
+      <div id="flash" class="promo-panel active" role="tabpanel">
+        <div class="promo-card">
+          <div class="promo-thumb"><div class="promo-thumb-label">POD</div><div class="promo-badge">-20%</div></div>
+          <div class="promo-body"><div class="promo-name">Promo Pod Device</div><div class="promo-price">Rp 299K</div></div>
+        </div>
+        <div class="promo-card">
+          <div class="promo-thumb"><div class="promo-thumb-label">LIQUID</div><div class="promo-badge">-15%</div></div>
+          <div class="promo-body"><div class="promo-name">Salt Nic Bundle</div><div class="promo-price">Rp 89K</div></div>
+        </div>
+        <div class="promo-card">
+          <div class="promo-thumb"><div class="promo-thumb-label">COIL</div><div class="promo-badge">-30%</div></div>
+          <div class="promo-body"><div class="promo-name">Coil Pack 5pcs</div><div class="promo-price">Rp 45K</div></div>
+        </div>
+        <div class="promo-card">
+          <div class="promo-thumb"><div class="promo-thumb-label">MOD</div><div class="promo-badge">-10%</div></div>
+          <div class="promo-body"><div class="promo-name">Starter Kit</div><div class="promo-price">Rp 450K</div></div>
+        </div>
+      </div>
+      <div id="bundle" class="promo-panel" role="tabpanel">
+        <div class="promo-empty">Bundle promo segera hadir<br>Pantau terus!</div>
+      </div>
+      <div id="new" class="promo-panel" role="tabpanel">
+        <div class="promo-empty">New arrivals segera hadir<br>Stay tuned!</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOKASI -->
+  <section id="lokasi" class="section" aria-label="Lokasi outlet">
+    <div class="reveal">
+      <div class="s-eyebrow">Temukan · Kami · Dekat</div>
+      <h2 class="s-title">LOKASI<br>OUTLET</h2>
+      <div class="s-divider"></div>
+      <div class="lokasi-list" id="lokasiList"></div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="section" aria-label="Tentang C Store">
+    <div class="about-watermark" aria-hidden="true">CSTORE</div>
+    <div class="about-inner reveal">
+      <div class="s-eyebrow">Our Story</div>
+      <h2 class="s-title">TENTANG<br>C STORE</h2>
+      <div class="s-divider"></div>
+      <p class="about-body">C Store adalah vape store premium yang hadir untuk memenuhi kebutuhan komunitas vape di seluruh Indonesia. Dengan pilihan produk berkualitas tinggi dan pelayanan yang cepat, kami berkomitmen memberikan pengalaman terbaik untuk setiap pelanggan.</p>
+      <p class="about-body">Dari Semarang hingga Surabaya, dari Jakarta hingga Bandung — C Store ada di kotamu, siap melayani dengan cepat via GrabMart &amp; WhatsApp kapanpun kamu butuhkan.</p>
+      <div class="about-stats">
+        <div class="as-card">
+          <div class="as-num">43</div>
+          <div class="as-label">Total Outlet</div>
+        </div>
+        <div class="as-card">
+          <div class="as-num">8</div>
+          <div class="as-label">Kota</div>
+        </div>
+        <div class="as-card">
+          <div class="as-num">21+</div>
+          <div class="as-label">Hanya untuk dewasa</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">C STORE</div>
+    <div class="footer-tagline">Premium Vape Store · Indonesia</div>
+    <nav class="footer-links" aria-label="Footer navigation">
+      <span class="footer-link" onclick="goTo('grabmart')">GrabMart</span>
+      <span class="footer-link" onclick="goTo('whatsapp')">WhatsApp</span>
+      <span class="footer-link" onclick="goTo('promo')">Promo</span>
+      <span class="footer-link" onclick="goTo('lokasi')">Lokasi</span>
+      <span class="footer-link" onclick="goTo('about')">About</span>
+      <span class="footer-link" onclick="goIG()">Instagram</span>
+    </nav>
+    <p class="footer-disclaimer">© 2025 C Store. Khusus untuk orang dewasa usia 21 tahun ke atas. Produk ini mengandung nikotin yang bersifat adiktif dan menyebabkan ketergantungan. Dilarang keras menjual kepada anak-anak dan remaja di bawah umur. Nikotin berbahaya bagi ibu hamil.</p>
+  </footer>
+
+  <!-- WA FLOAT -->
+  <div id="wa-float" onclick="goTo('whatsapp')" role="button" tabindex="0" aria-label="Order via WhatsApp">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </div>
+
+</div>
+
+<script>
+const WA_SVG=`<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="white" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`;
+
+const outlets={
+  Jakarta:[
+    {name:"C Store Muwardi Grogol Jakarta Barat",url:"https://wa.me/087722724816"},
+    {name:"C Store Milenial PIK 2",url:"https://wa.me/6281944219566"},
+    {name:"C Store Kebon Jeruk",url:"https://wa.me/6287722724818"}
+  ],
+  Tangerang:[
+    {name:"C Store Palem Semi",url:"https://wa.me/628175200134"},
+    {name:"C Store Fiorenza",url:"https://wa.me/6281944210513"},
+    {name:"C Store Taman Royal",url:"https://wa.me/6287722724805"},
+    {name:"C Store Benda Pamulang",url:"https://wa.me/6281944215238"},
+    {name:"C Store Puspitek",url:"https://wa.me/6281913580778"},
+    {name:"C Store Taman Asri",url:"https://wa.me/6287722724806"}
+  ],
+  Cibubur:[
+    {name:"C Store Canadian Cibubur",url:"https://wa.me/6281944220051"},
+    {name:"C Store Permata Cibubur",url:"https://wa.me/6281944214740"},
+    {name:"C Store CBD Cibubur",url:"https://wa.me/628175200141"}
+  ],
+  Karawang:[{name:"C Store Taruma",url:"https://wa.me/6287722724809"}],
+  Serang:[{name:"C Store Citra",url:"https://wa.me/6287722724801"}],
+  Bandung:[
+    {name:"C Store Cijagra",url:"https://wa.me/6287722724813"},
+    {name:"C Store Duyut",url:"https://wa.me/6287722724798"},
+    {name:"C Store Harmony",url:"https://wa.me/6287722724824"},
+    {name:"C Store Pluto",url:"https://wa.me/6281944219564"},
+    {name:"C Store TKI 3",url:"https://wa.me/6281949873164"},
+    {name:"C Store Kopo Permai 3",url:"https://wa.me/6287722724827"},
+    {name:"C Store Pelajar Pejuang 45",url:"https://wa.me/6281944219563"},
+    {name:"C Store Veteran",url:"https://wa.me/6287722724796"},
+    {name:"C Store Cijambe",url:"https://wa.me/6287700293366"},
+    {name:"C Store Istana Sudirman",url:"https://wa.me/6287700293365"},
+    {name:"C Store Jurang Pasteur",url:"https://wa.me/6285966715459"},
+    {name:"C Store Astana",url:"https://wa.me/6287722724795"},
+    {name:"C Store Kopo Raya",url:"https://wa.me/6287722724800"},
+    {name:"C Store IBCC",url:"https://wa.me/6285966715453"}
+  ],
+  Semarang:[
+    {name:"C Store Bonjol",url:"https://wa.me/6287722724838"},
+    {name:"C Store Plamongan",url:"https://wa.me/6287722724837"},
+    {name:"C Store Anggrek",url:"https://wa.me/6287722724834"},
+    {name:"C Store Lamper",url:"https://wa.me/6287722724832"},
+    {name:"C Store Kedungmundu",url:"https://wa.me/6287722724833"},
+    {name:"C Store Tlogosari",url:"https://wa.me/6287722724829"},
+    {name:"C Store Kelud",url:"https://wa.me/6287854020222"}
+  ],
+  Surabaya:[
+    {name:"C Store Ketintang",url:"https://wa.me/628175200136"},
+    {name:"C Store Sukolilo",url:"https://wa.me/628175200137"},
+    {name:"C Store Bukitmas",url:"https://wa.me/628175200140"},
+    {name:"C Store Northwest",url:"https://wa.me/628175200139"}
+  ]
+};
+
+function buildSmoke(){
+  const c=document.getElementById('smokeBg');
+  for(let i=0;i<8;i++){
+    const s=document.createElement('span');
+    s.className='smoke-particle';
+    const sz=Math.random()*16+8;
+    s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;animation-duration:${Math.random()*6+5}s;animation-delay:${Math.random()*4}s`;
+    c.appendChild(s);
+  }
+}
+
+function buildParticles(){
+  const c=document.getElementById('heroParticles');
+  for(let i=0;i<14;i++){
+    const p=document.createElement('div');
+    p.className='hp';
+    const sz=Math.random()*10+4;
+    p.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;animation-duration:${Math.random()*10+7}s;animation-delay:${Math.random()*6}s`;
+    c.appendChild(p);
+  }
+}
+
+function buildWA(){
+  const tabsEl=document.getElementById('cityTabs');
+  const panelsEl=document.getElementById('cityPanels');
+  const cities=Object.keys(outlets);
+  cities.forEach((city,i)=>{
+    const tab=document.createElement('button');
+    tab.className='ctab'+(i===0?' active':'');
+    tab.textContent=city;
+    tab.setAttribute('role','tab');
+    tab.setAttribute('aria-selected',i===0?'true':'false');
+    tab.setAttribute('aria-controls','cp-'+city);
+    tab.onclick=()=>switchCity(city,tab);
+    tabsEl.appendChild(tab);
+
+    const panel=document.createElement('div');
+    panel.className='city-panel'+(i===0?' active':'');
+    panel.id='cp-'+city;
+    panel.setAttribute('role','tabpanel');
+    panel.innerHTML=`<div class="cp-meta">${outlets[city].length} outlet tersedia di ${city}</div><div class="wa-list">${outlets[city].map(o=>`<div class="wa-item" onclick="window.open('${o.url}','_blank')" role="link" tabindex="0" aria-label="WhatsApp ${o.name}"><span class="wa-item-name">${o.name}</span><div class="wa-btn" aria-hidden="true">${WA_SVG}</div></div>`).join('')}</div>`;
+    panelsEl.appendChild(panel);
+  });
+}
+
+function buildLokasi(){
+  const el=document.getElementById('lokasiList');
+  Object.keys(outlets).forEach(city=>{
+    const list=outlets[city];
+    const div=document.createElement('div');
+    div.className='lokasi-city';
+    div.innerHTML=`<div class="lokasi-header" onclick="toggleLokasi(this)" role="button" tabindex="0" aria-expanded="false" aria-label="${city}, ${list.length} outlet"><div class="lh-left"><span class="lh-city">${city.toUpperCase()}</span><span class="lh-count">${list.length} OUTLET</span></div><span class="lh-arrow" aria-hidden="true">›</span></div><div class="lokasi-body" aria-hidden="true"><div>${list.map(o=>`<div class="lokasi-outlet"><span class="lo-name">${o.name}</span><span class="lo-wa" onclick="event.stopPropagation();window.open('${o.url}','_blank')" role="link" tabindex="0" aria-label="WhatsApp ${o.name}">Chat WA</span></div>`).join('')}</div></div>`;
+    el.appendChild(div);
+  });
+}
+
+function switchCity(city,tab){
+  document.querySelectorAll('.ctab').forEach(t=>{t.classList.remove('active');t.setAttribute('aria-selected','false')});
+  document.querySelectorAll('.city-panel').forEach(p=>p.classList.remove('active'));
+  tab.classList.add('active');tab.setAttribute('aria-selected','true');
+  document.getElementById('cp-'+city).classList.add('active');
+}
+
+function switchPromo(btn,id){
+  document.querySelectorAll('.ptab').forEach(t=>{t.classList.remove('active');t.setAttribute('aria-selected','false')});
+  document.querySelectorAll('.promo-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');btn.setAttribute('aria-selected','true');
+  document.getElementById(id).classList.add('active');
+}
+
+function toggleLokasi(header){
+  const city=header.parentElement;
+  const isOpen=city.classList.toggle('open');
+  header.setAttribute('aria-expanded',isOpen);
+  header.nextElementSibling.setAttribute('aria-hidden',!isOpen);
+}
+
+function goTo(id){
+  const el=document.getElementById(id);
+  if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function goIG(){window.open('https://www.instagram.com/cstorevape','_blank')}
+function openLink(url){window.open(url,'_blank')}
+
+function enterSite(){
+  const gate=document.getElementById('age-gate');
+  gate.style.transition='opacity 0.6s ease';
+  gate.style.opacity='0';
+  setTimeout(()=>{
+    gate.style.display='none';
+    const main=document.getElementById('main');
+    main.style.display='block';
+    document.getElementById('wa-float').style.display='flex';
+    initObserver();
+    buildParticles();
+  },600);
+}
+function exitSite(){window.location.href='https://google.com'}
+
+function initObserver(){
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')});
+  },{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+}
+
+buildSmoke();
+buildWA();
+buildLokasi();
+</script>
+</body>
+</html>
